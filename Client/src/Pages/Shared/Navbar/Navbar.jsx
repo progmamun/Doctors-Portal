@@ -51,7 +51,7 @@ const Navbar = () => {
             {menuItems}
           </ul>
         </div>
-        <Link path="/" className="btn btn-ghost normal-case text-xl">
+        <Link to="/" className="btn btn-ghost normal-case text-xl">
           Doctors Portal
         </Link>
       </div>
