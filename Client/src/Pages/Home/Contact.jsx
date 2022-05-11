@@ -1,6 +1,5 @@
 import React from 'react';
 import appointment from '../../assets/images/appointment.png';
-import PrimaryButton from '../Shared/PrimaryButton';
 
 const Contact = () => {
   return (
@@ -32,7 +31,7 @@ const Contact = () => {
           placeholder="Your message"
           rows={6}
         ></textarea>
-        <PrimaryButton>Submit</PrimaryButton>
+        <button className="primaryBtn">Submit</button>
       </div>
     </div>
   );
