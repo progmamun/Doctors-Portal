@@ -5,6 +5,7 @@ import Home from './Pages/Home/Home';
 import Appointment from './Pages/Appointment/Appointment';
 import Footer from './Pages/Shared/Footer.jsx';
 import Login from './Pages/Login/Login';
+import SignUp from './Pages/Login/SignUp';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
          */}
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
       <Footer></Footer>
     </div>
