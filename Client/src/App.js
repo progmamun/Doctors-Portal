@@ -6,15 +6,23 @@ import Appointment from './Pages/Appointment/Appointment';
 import Footer from './Pages/Shared/Footer.jsx';
 import Login from './Pages/Login/Login';
 import SignUp from './Pages/Login/SignUp';
+import RequireAuth from './Pages/Login/RequireAuth';
 
 function App() {
   return (
-    <div className="max-w-7xl">
+    <div className="max-w-7xl mx-auto px-12">
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/appointment" element={<Appointment />} />
+        <Route
+          path="/appointment"
+          element={
+            <RequireAuth>
+              <Appointment />
+            </RequireAuth>
+          }
+        />
         {/*  <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
          */}
