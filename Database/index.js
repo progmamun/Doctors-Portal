@@ -40,8 +40,13 @@ async function run() {
         date: booking.date,
         patient: booking.patient,
       };
-      const result = await bookingCollection.insertOne(booking);
-      res.send(result);
+      const exists = await bookingCollection.findOne(query);
+      if (exists) {
+        return res.send({ success: false, booking: exists });
+      } else {
+        const result = await bookingCollection.insertOne(booking);
+        return res.send({ success: true, result });
+      }
     });
   } finally {
   }
