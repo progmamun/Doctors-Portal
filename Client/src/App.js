@@ -7,11 +7,14 @@ import Footer from './Pages/Shared/Footer.jsx';
 import Login from './Pages/Login/Login';
 import SignUp from './Pages/Login/SignUp';
 import RequireAuth from './Pages/Login/RequireAuth';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, Flip } from 'react-toastify';
 
 function App() {
   return (
     <div className="max-w-7xl mx-auto px-12">
       <Navbar></Navbar>
+      <ToastContainer transition={Flip} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
