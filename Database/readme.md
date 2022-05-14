@@ -8,4 +8,5 @@
 - app.get('/booking/:id') // get a specific booking
 - app.post('/booking') // add a new booking
 - app.patch('/booking/:id') //
+- app.put('/booking/:id') // upsert ==> update(if exists) or insert (if doesn't exist)
 - app.delete('/booking/:id') //

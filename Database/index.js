@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -25,27 +26,44 @@ async function run() {
     const bookingCollection = client
       .db('doctors_portal')
       .collection('bookings');
+    const usersCollection = client.db('doctors_portal').collection('users');
 
     app.get('/service', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
-      const service = await cursor.toArray();
-      res.send(service);
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    app.put('/user/:email', async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
     });
 
     // Warning: This is not the proper way to query multiple collection.
     // After learning more about mongodb. use aggregate, lookup, pipeline, match, group
-
     app.get('/available', async (req, res) => {
-      const data = req.query.date;
-      // step 1: get all services
+      const date = req.query.date;
+
+      // step 1:  get all services
       const services = await serviceCollection.find().toArray();
 
       // step 2: get the booking of that day. output: [{}, {}, {}, {}, {}, {}]
       const query = { date: date };
       const bookings = await bookingCollection.find(query).toArray();
 
-      // step 3: for each service,
+      // step 3: for each service
       services.forEach(service => {
         // step 4: find bookings for that service. output: [{}, {}, {}, {}]
         const serviceBookings = bookings.filter(
@@ -57,7 +75,7 @@ async function run() {
         const available = service.slots.filter(
           slot => !bookedSlots.includes(slot)
         );
-        // step 7: return available slots to make it easier
+        //step 7: set available to slots to make it easier
         service.slots = available;
       });
 
@@ -81,10 +99,9 @@ async function run() {
       const exists = await bookingCollection.findOne(query);
       if (exists) {
         return res.send({ success: false, booking: exists });
-      } else {
-        const result = await bookingCollection.insertOne(booking);
-        return res.send({ success: true, result });
       }
+      const result = await bookingCollection.insertOne(booking);
+      return res.send({ success: true, result });
     });
   } finally {
   }
@@ -93,9 +110,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-  res.send('Hello from Doctors!');
+  res.send('Hello From Doctor Uncle!');
 });
 
 app.listen(port, () => {
-  console.log(`Doctors is listening on port ${port}`);
+  console.log(`Doctors App listening on port ${port}`);
 });
