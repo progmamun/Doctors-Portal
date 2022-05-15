@@ -10,3 +10,6 @@
 - app.patch('/booking/:id') //
 - app.put('/booking/:id') // upsert ==> update(if exists) or insert (if doesn't exist)
 - app.delete('/booking/:id') //
+
+## node Crypto:  
+- `require('crypto').randomBytes(64).toString('hex')`
