@@ -9,7 +9,7 @@ const useToken = user => {
       fetch(`http://localhost:5000/user/${email}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'content-type': 'application/json',
         },
         body: JSON.stringify(currentUser),
       })
@@ -17,12 +17,12 @@ const useToken = user => {
         .then(data => {
           console.log('data inside useToken', data);
           const accessToken = data.token;
-          localStorage.setToken(accessToken);
+          localStorage.setItem('accessToken', accessToken);
           setToken(accessToken);
         });
     }
   }, [user]);
-
-  return { token };
+  return [token];
 };
+
 export default useToken;

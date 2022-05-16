@@ -14,9 +14,8 @@ const Users = () => {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
-    })
-  ).then(res => res.json());
-
+    }).then(res => res.json())
+  );
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -24,12 +23,14 @@ const Users = () => {
     <div>
       <h2 className="text-2xl">All Users: {users.length}</h2>
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table w-full">
           <thead>
-            <tr></tr>
-            <tr>Email</tr>
-            <tr>Role</tr>
-            <tr>Action</tr>
+            <tr>
+              <th></th>
+              <th>email</th>
+              <th>role</th>
+              <th>action</th>
+            </tr>
           </thead>
           <tbody>
             {users.map(user => (

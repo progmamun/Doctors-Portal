@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import auth from '../../firebase';
+import auth from '../../firebase.init';
 import useAdmin from '../../hooks/useAdmin';
 import Loading from '../Shared/Loading';
 import { signOut } from 'firebase/auth';
