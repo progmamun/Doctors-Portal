@@ -42,7 +42,7 @@ async function run() {
     const bookingCollection = client
       .db('doctors_portal')
       .collection('bookings');
-    const usersCollection = client.db('doctors_portal').collection('users');
+    const userCollection = client.db('doctors_portal').collection('users');
 
     app.get('/service', async (req, res) => {
       const query = {};
@@ -52,21 +52,21 @@ async function run() {
     });
 
     app.get('/user', verifyJWT, async (req, res) => {
-      const users = await usersCollection.find().toArray();
+      const users = await userCollection.find().toArray();
       res.send(users);
     });
 
-    // admin
     app.get('/admin/:email', async (req, res) => {
       const email = req.params.email;
-      const user = await usersCollection.findOne({ email: email });
+      const user = await userCollection.findOne({ email: email });
+      const isAdmin = user.role === 'admin';
       res.send({ admin: isAdmin });
     });
 
     app.put('/user/admin/:email', verifyJWT, async (req, res) => {
       const email = req.params.email;
       const requester = req.decoded.email;
-      const requesterAccount = await usersCollection.findOne({
+      const requesterAccount = await userCollection.findOne({
         email: requester,
       });
       if (requesterAccount.role === 'admin') {
@@ -74,10 +74,10 @@ async function run() {
         const updateDoc = {
           $set: { role: 'admin' },
         };
-        const result = await usersCollection.updateOne(filter, updateDoc);
+        const result = await userCollection.updateOne(filter, updateDoc);
         res.send(result);
       } else {
-        res.status(403).send({ message: 'Forbidden access' });
+        res.status(403).send({ message: 'forbidden' });
       }
     });
 
@@ -89,11 +89,7 @@ async function run() {
       const updateDoc = {
         $set: user,
       };
-      const result = await usersCollection.updateOne(
-        filter,
-        updateDoc,
-        options
-      );
+      const result = await userCollection.updateOne(filter, updateDoc, options);
       const token = jwt.sign(
         { email: email },
         process.env.ACCESS_TOKEN_SECRET,
