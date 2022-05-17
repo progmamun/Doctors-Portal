@@ -22,3 +22,11 @@
 
 - ctrl+shift+right arrow
 - shift+end (every cursor line select )
+
+---
+
+- 3 ways to store images
+  - 1.  Third party storage :Free open public storage is ok for Practice project
+  - 2.  Your own storage in your own server (file system)
+  - 3.  Database: Mongodb
+  - YUP: to validate file: Search:- Yup file validation for react hook form

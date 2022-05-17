@@ -11,12 +11,25 @@ const AddDoctor = () => {
     handleSubmit,
   } = useForm();
 
+  const imageStorageKey = process.env.REACT_APP_IMAGE_STORAGE_KEY;
+
   const { data: services, isLoading } = useQuery('services', () =>
     fetch('http://localhost:5000/service')
   );
 
   const onSubmit = async data => {
-    console.log('data', data);
+    const image = data.image[0];
+    const formData = new FormData();
+    formData.append('image', image);
+    const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log('imgbb', result);
+      });
   };
 
   if (isLoading) {
@@ -86,7 +99,10 @@ const AddDoctor = () => {
           <label className="label">
             <span className="label-text">specialty</span>
           </label>
-          <select {...register('specialty')} className="select w-full max-w-sm">
+          <select
+            {...register('specialty')}
+            className="input-bordered select w-full max-w-sm"
+          >
             {services.map(service => (
               <option key={service._id} value={service.name}>
                 {service.name}
