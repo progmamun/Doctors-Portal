@@ -1,5 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+import Loading from '../Shared/Loading';
 
 const AddDoctor = () => {
   const {
@@ -8,9 +11,17 @@ const AddDoctor = () => {
     handleSubmit,
   } = useForm();
 
+  const { data: services, isLoading } = useQuery('services', () =>
+    fetch('http://localhost:5000/service')
+  );
+
   const onSubmit = async data => {
     console.log('data', data);
   };
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <div>
       <h3 className="text-2xl">Add a New Doctor</h3>
@@ -75,21 +86,32 @@ const AddDoctor = () => {
           <label className="label">
             <span className="label-text">specialty</span>
           </label>
+          <select {...register('specialty')} className="select w-full max-w-sm">
+            {services.map(service => (
+              <option key={service._id} value={service.name}>
+                {service.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Photo</span>
+          </label>
           <input
-            type="password"
-            placeholder="specialty"
+            type="file"
             className="input input-bordered w-full max-w-xs"
-            {...register('specialty', {
+            {...register('image', {
               required: {
                 value: true,
-                message: 'specialty is Required',
+                message: 'Image is Required',
               },
             })}
           />
           <label className="label">
-            {errors.password?.type === 'required' && (
+            {errors.name?.type === 'required' && (
               <span className="label-text-alt text-red-500">
-                {errors.password.message}
+                {errors.name.message}
               </span>
             )}
           </label>
