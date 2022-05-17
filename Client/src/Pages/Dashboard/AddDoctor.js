@@ -9,6 +9,7 @@ const AddDoctor = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm();
 
   const imageStorageKey = process.env.REACT_APP_IMAGE_STORAGE_KEY;
@@ -28,7 +29,31 @@ const AddDoctor = () => {
     })
       .then(res => res.json())
       .then(result => {
-        console.log('imgbb', result);
+        if (result.success) {
+          const img = result.data.url;
+          const doctor = {
+            name: data.name,
+            email: data.email,
+            specialty: data.specialty,
+            img: img,
+          };
+          // send mongodb database
+          fetch('http://localhost:5000/doctor', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(doctor),
+          })
+            .then(res => res.json())
+            .then(inserted => {
+              if (inserted.insertedId) {
+                toast.success('Doctor added successfully');
+                reset();
+              }
+            });
+        }
       });
   };
 
