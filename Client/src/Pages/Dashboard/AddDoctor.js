@@ -12,11 +12,11 @@ const AddDoctor = () => {
     reset,
   } = useForm();
 
-  const imageStorageKey = process.env.REACT_APP_IMAGE_STORAGE_KEY;
-
   const { data: services, isLoading } = useQuery('services', () =>
-    fetch('http://localhost:5000/service')
+    fetch('http://localhost:5000/service').then(res => res.json())
   );
+
+  const imageStorageKey = '9898d74d96232e8aa8ab3cbd1b719668';
 
   const onSubmit = async data => {
     const image = data.image[0];
@@ -37,11 +37,11 @@ const AddDoctor = () => {
             specialty: data.specialty,
             img: img,
           };
-          // send mongodb database
+          // send to your database
           fetch('http://localhost:5000/doctor', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'content-type': 'application/json',
               authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
             body: JSON.stringify(doctor),
@@ -51,6 +51,8 @@ const AddDoctor = () => {
               if (inserted.insertedId) {
                 toast.success('Doctor added successfully');
                 reset();
+              } else {
+                toast.error('Failed to add the doctor');
               }
             });
         }
@@ -60,9 +62,10 @@ const AddDoctor = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
+
   return (
     <div>
-      <h3 className="text-2xl">Add a New Doctor</h3>
+      <h2 className="text-2xl">Add a New Doctor</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-control w-full max-w-xs">
           <label className="label">
@@ -120,13 +123,14 @@ const AddDoctor = () => {
             )}
           </label>
         </div>
+
         <div className="form-control w-full max-w-xs">
           <label className="label">
-            <span className="label-text">specialty</span>
+            <span className="label-text">Specialty</span>
           </label>
           <select
             {...register('specialty')}
-            className="input-bordered select w-full max-w-sm"
+            class="select input-bordered w-full max-w-xs"
           >
             {services.map(service => (
               <option key={service._id} value={service.name}>
@@ -135,6 +139,7 @@ const AddDoctor = () => {
             ))}
           </select>
         </div>
+
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Photo</span>
@@ -157,6 +162,7 @@ const AddDoctor = () => {
             )}
           </label>
         </div>
+
         <input
           className="btn w-full max-w-xs text-white"
           type="submit"

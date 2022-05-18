@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
-import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -26,7 +26,9 @@ const MyAppointments = () => {
           }
           return res.json();
         })
-        .then(data => setAppointments(data));
+        .then(data => {
+          setAppointments(data);
+        });
     }
   }, [user]);
 
