@@ -50,10 +50,10 @@ async function run() {
       const requesterAccount = await userCollection.findOne({
         email: requester,
       });
-      if (requesterAccount.role !== 'admin') {
+      if (requesterAccount.role === 'admin') {
         next();
       } else {
-        res.status(403).send({ message: 'Forbidden access' });
+        res.status(403).send({ message: 'forbidden' });
       }
     };
 
@@ -134,6 +134,16 @@ async function run() {
       res.send(services);
     });
 
+    /**
+     * API Naming Convention
+     * app.get('/booking') // get all bookings in this collection. or get more than one or by filter
+     * app.get('/booking/:id') // get a specific booking
+     * app.post('/booking') // add a new booking
+     * app.patch('/booking/:id) //
+     * app.put('/booking/:id') // upsert ==> update (if exists) or insert (if doesn't exist)
+     * app.delete('/booking/:id) //
+     */
+
     app.get('/booking', verifyJWT, async (req, res) => {
       const patient = req.query.patient;
       const decodedEmail = req.decoded.email;
@@ -144,13 +154,6 @@ async function run() {
       } else {
         return res.status(403).send({ message: 'forbidden access' });
       }
-    });
-
-    app.get('/booking/:id', verifyJWT, async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const booking = await bookingCollection.findOne(query);
-      res.send(booking);
     });
 
     app.post('/booking', async (req, res) => {
@@ -165,6 +168,8 @@ async function run() {
         return res.send({ success: false, booking: exists });
       }
       const result = await bookingCollection.insertOne(booking);
+      console.log('sending email');
+      sendAppointmentEmail(booking);
       return res.send({ success: true, result });
     });
 
@@ -176,6 +181,13 @@ async function run() {
     app.post('/doctor', verifyJWT, verifyAdmin, async (req, res) => {
       const doctor = req.body;
       const result = await doctorCollection.insertOne(doctor);
+      res.send(result);
+    });
+
+    app.delete('/doctor/:email', verifyJWT, verifyAdmin, async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const result = await doctorCollection.deleteOne(filter);
       res.send(result);
     });
   } finally {
