@@ -1,5 +1,5 @@
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 const CheckoutForm = ({ appointment }) => {
   const stripe = useStripe();
@@ -91,7 +91,6 @@ const CheckoutForm = ({ appointment }) => {
         });
     }
   };
-
   return (
     <>
       <form onSubmit={handleSubmit}>
