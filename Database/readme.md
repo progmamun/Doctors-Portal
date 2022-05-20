@@ -1,6 +1,7 @@
 ## Database: Doctors Portal
 
 - `npm i express cors dotenv mongodb jsonwebtoken`
+- `npm install --save stripe`
 
 ### API Naming Convention
 
