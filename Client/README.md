@@ -26,8 +26,28 @@
 
 ---
 
-- 3 ways to store images
-  - 1.  Third party storage :Free open public storage is ok for Practice project
-  - 2.  Your own storage in your own server (file system)
-  - 3.  Database: Mongodb
-  - YUP: to validate file: Search:- Yup file validation for react hook form
+## 3 ways to store images
+
+1.  Third party storage :Free open public storage is ok for Practice project
+2.  Your own storage in your own server (file system)
+3.  Database: Mongodb
+
+- YUP: to validate file: Search:- Yup file validation for react hook form
+
+## Payment Steps:
+
+1. install stripe react stripe js
+2. open stripe account on stripe website
+3. get publishable key pk\_\_\_
+4. Create Elements wrapper using publishable key
+5. Create Checkout Form using Card element, useStripe, useElements
+6. get card elements info(credit card info)
+7. get credit card info/error + display card error (if any)
+
+---
+
+9.  get client secret from backend via payment intent post api
+10. store client secret on the client side
+11. Create card payment confirmation
+12. once payment is confirmed save payment information to the server
+13. display transaction id
